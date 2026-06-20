@@ -1,0 +1,31 @@
+{
+  "smartphones": [
+    { "id": "s24", "name": "Samsung Galaxy S24", "width": 70.6, "height": 147.0, "depth": 6.5 },
+    { "id": "s24plus", "name": "Samsung Galaxy S24+", "width": 75.9, "height": 158.5, "depth": 7.2 },
+    { "id": "s24ultra", "name": "Samsung Galaxy S24 Ultra", "width": 79.0, "height": 162.8, "depth": 8.6 },
+    { "id": "a55", "name": "Samsung Galaxy A55", "width": 77.4, "height": 161.1, "depth": 8.2 },
+    { "id": "a36", "name": "Samsung Galaxy A36", "width": 78.2, "height": 162.9, "depth": 7.4 },
+    { "id": "s23", "name": "Samsung Galaxy S23", "width": 70.9, "height": 146.3, "depth": 6.3 },
+    { "id": "s23ultra", "name": "Samsung Galaxy S23 Ultra", "width": 78.1, "height": 163.4, "depth": 8.8 },
+    { "id": "pixel9pro", "name": "Google Pixel 9 Pro", "width": 72.0, "height": 152.8, "depth": 7.0 },
+    { "id": "pixel9promax", "name": "Google Pixel 9 Pro Max", "width": 76.6, "height": 162.8, "depth": 7.6 },
+    { "id": "pixel9", "name": "Google Pixel 9", "width": 68.2, "height": 152.8, "depth": 6.3 },
+    { "id": "iphone16pro", "name": "iPhone 16 Pro", "width": 71.6, "height": 147.6, "depth": 7.8 },
+    { "id": "iphone16promax", "name": "iPhone 16 Pro Max", "width": 77.8, "height": 159.9, "depth": 7.8 },
+    { "id": "iphone16", "name": "iPhone 16", "width": 70.6, "height": 147.6, "depth": 7.9 },
+    { "id": "iphone16plus", "name": "iPhone 16 Plus", "width": 77.8, "height": 159.9, "depth": 7.8 },
+    { "id": "iphone15pro", "name": "iPhone 15 Pro", "width": 70.7, "height": 147.0, "depth": 7.8 },
+    { "id": "iphone15promax", "name": "iPhone 15 Pro Max", "width": 77.0, "height": 159.9, "depth": 7.8 },
+    { "id": "iphone15", "name": "iPhone 15", "width": 70.7, "height": 147.8, "depth": 7.80 },
+    { "id": "oneplus12", "name": "OnePlus 12", "width": 74.1, "height": 164.3, "depth": 9.1 },
+    { "id": "xiaomi14ultra", "name": "Xiaomi 14 Ultra", "width": 74.6, "height": 163.2, "depth": 8.3 },
+    { "id": "samsungs25", "name": "Samsung Galaxy S25", "width": 71.6, "height": 152.9, "depth": 6.8 },
+    { "id": "samsungs25ultra", "name": "Samsung Galaxy S25 Ultra", "width": 77.8, "height": 162.8, "depth": 8.2 },
+    { "id": "pixel10pro", "name": "Google Pixel 10 Pro", "width": 72.0, "height": 152.8, "depth": 7.2 },
+    { "id": "redminote13", "name": "Redmi Note 13", "width": 76.0, "height": 160.6, "depth": 7.8 },
+    { "id": "pocomx4", "name": "POCO X4", "width": 69.5, "height": 155.1, "depth": 8.0 },
+    { "id": "motog85", "name": "Motorola Moto G85", "width": 72.5, "height": 158.5, "depth": 7.9 },
+    { "id": "nokia210", "name": "Nokia G210", "width": 73.9, "height": 164.1, "depth": 8.5 },
+    { "id": "htcdesire21", "name": "HTC Desire 21 pro", "width": 73.9, "height": 159.9, "depth": 8.5 }
+  ]
+}

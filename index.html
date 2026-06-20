@@ -1,0 +1,1501 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smartphone A4 SVG Planner</title>
+  <style>
+    :root {
+      --bg-a: #f6f2e8;
+      --bg-b: #e7f1ef;
+      --ink: #1d2a32;
+      --panel: #ffffffd9;
+      --line: #b9c6cd;
+      --brand: #006f86;
+      --brand-soft: #d8edf1;
+      --danger: #9f2f2f;
+      --ok: #1d7f3f;
+      --shadow: 0 18px 40px rgba(16, 28, 34, 0.16);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Bahnschrift", "Trebuchet MS", "Gill Sans", sans-serif;
+      background:
+        radial-gradient(60rem 30rem at -10% -10%, #fff7d5 0%, transparent 70%),
+        radial-gradient(40rem 24rem at 105% 10%, #d8f6ff 0%, transparent 70%),
+        linear-gradient(160deg, var(--bg-a), var(--bg-b));
+      min-height: 100vh;
+    }
+
+    .wrap {
+      width: min(1200px, 95vw);
+      margin: 24px auto 40px;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1.1fr 1fr;
+      align-items: start;
+      animation: enter 320ms ease-out;
+    }
+
+    @keyframes enter {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid #ffffff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      padding: 16px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      letter-spacing: 0.03em;
+      font-size: clamp(1.3rem, 1.2rem + 1vw, 2rem);
+    }
+
+    h2 {
+      margin: 8px 0 10px;
+      font-size: 1.08rem;
+      letter-spacing: 0.02em;
+    }
+
+    p.note {
+      margin: 0;
+      opacity: 0.78;
+      font-size: 0.95rem;
+    }
+
+    p.note.subtle {
+      margin-top: 8px;
+      font-size: 0.72rem;
+      opacity: 0.62;
+      text-align: right;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    button,
+    select,
+    input {
+      font: inherit;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    button {
+      cursor: pointer;
+      transition: transform 100ms ease, box-shadow 120ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    button.primary {
+      border-color: transparent;
+      background: linear-gradient(140deg, #007b95, #005f75);
+      color: #fff;
+    }
+
+    button.warn {
+      border-color: transparent;
+      background: linear-gradient(140deg, #b53c3c, #8a2525);
+      color: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .device-settings-table {
+      table-layout: fixed;
+      margin-top: 0;
+    }
+
+    .device-settings-table col.device-col-name {
+      width: 50%;
+    }
+
+    .device-settings-table col.device-col-dimension {
+      width: 14%;
+    }
+
+    .device-settings-table col.device-col-action {
+      width: 8%;
+    }
+
+    th,
+    td {
+      text-align: left;
+      border-bottom: 1px solid #d9e3e8;
+      padding: 8px 4px;
+      font-size: 0.93rem;
+      vertical-align: middle;
+    }
+
+    th {
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.75;
+    }
+
+    td input {
+      width: 100%;
+      min-width: 70px;
+    }
+
+    .device-settings-table td {
+      overflow: hidden;
+    }
+
+    .device-name-input {
+      min-width: 0;
+    }
+
+    .device-number-input {
+      min-width: 0;
+      max-width: none;
+    }
+
+    .device-settings-table th,
+    .device-settings-table td {
+      padding: 5px 4px;
+      font-size: 0.82rem;
+    }
+
+    .device-settings-table th {
+      font-size: 0.72rem;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #f7fbfd;
+    }
+
+    .device-settings-table td input {
+      width: 100%;
+      padding: 5px 7px;
+      font-size: 0.8rem;
+      border-radius: 8px;
+    }
+
+    .device-table-scroll {
+      margin-top: 10px;
+      max-height: min(44vh, 360px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      border: 1px solid #d9e3e8;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .small-btn {
+      padding: 6px 8px;
+      font-size: 0.85rem;
+    }
+
+    .page-card {
+      border: 1px solid #d2e0e5;
+      border-radius: 12px;
+      padding: 10px;
+      margin-top: 8px;
+      background: linear-gradient(180deg, #fff, #f7fbfd);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .page-card strong {
+      white-space: nowrap;
+      font-size: 0.9rem;
+    }
+
+    .pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .pair label {
+      display: grid;
+      gap: 4px;
+      font-size: 0.82rem;
+      opacity: 0.9;
+    }
+
+    .preview-toolbar {
+      display: grid;
+      gap: 14px;
+      margin: 10px 0;
+    }
+
+    .toolbar-selects {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      flex: 1;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding-top: 6px;
+    }
+
+    .toolbar-selects label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .dropdown-field {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .dropdown-input {
+      width: 100%;
+      min-width: 0;
+      padding-right: 32px;
+    }
+
+    .dropdown-clear {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border: none;
+      border-radius: 999px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #dfe9ed;
+      color: #35515d;
+      font-size: 13px;
+      line-height: 1;
+      box-shadow: none;
+    }
+
+    .dropdown-clear:hover {
+      background: #cad9df;
+      transform: translateY(-50%);
+      box-shadow: none;
+    }
+
+    .dropdown-clear.is-hidden {
+      display: none;
+    }
+
+    .svg-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e0e6eb;
+    }
+
+    .panel-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #e0e6eb;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: 0.82rem;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: #073947;
+      padding: 4px 10px;
+      border: 1px solid #b6d7df;
+    }
+
+    .preview {
+      width: 100%;
+      aspect-ratio: 210 / 297;
+      border: 1px solid #d4e0e6;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    #previewSvg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .status {
+      margin-top: 8px;
+      min-height: 1.2rem;
+      font-size: 0.9rem;
+      color: var(--ok);
+    }
+
+    .status.compact {
+      margin-top: 10px;
+      font-size: 0.82rem;
+      min-height: 1rem;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(2px);
+      z-index: 999;
+      animation: fadeIn 200ms ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-panel {
+      background: var(--panel);
+      border: 1px solid #ffffff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      padding: 20px;
+      max-width: 640px;
+      width: min(96vw, 640px);
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideIn 200ms ease;
+      position: relative;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--ink);
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 120ms ease;
+    }
+
+    .modal-close:hover {
+      transform: scale(1.2);
+    }
+
+    .icon-btn {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--brand);
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 120ms ease;
+    }
+
+    .icon-btn:hover {
+      background: var(--brand);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .icon-btn-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--ink);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 120ms ease;
+      margin-bottom: 8px;
+    }
+
+    .icon-btn-wrapper:hover .tooltip {
+      opacity: 1;
+    }
+
+    .toolbar-icons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .toolbar-icons.settings {
+      margin-left: auto;
+    }
+
+    .select-search {
+      display: grid;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+
+    .select-search input {
+      min-width: 220px;
+    }
+
+    .table-tools {
+      display: grid;
+      gap: 10px;
+      margin: 12px 0 10px;
+    }
+
+    .sync-controls {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: end;
+    }
+
+    .sync-controls .icon-btn-wrapper {
+      align-self: end;
+    }
+
+    .sync-controls label {
+      display: grid;
+      gap: 4px;
+      font-size: 0.82rem;
+      opacity: 0.9;
+    }
+
+    .sync-meta {
+      font-size: 0.82rem;
+      opacity: 0.78;
+    }
+
+    .modal-panel h1 {
+      margin-top: 0;
+      padding-right: 40px;
+    }
+
+    @media (max-width: 960px) {
+      .wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .pair {
+        grid-template-columns: 1fr;
+      }
+
+      .page-card {
+        grid-template-columns: 1fr;
+      }
+
+      .sync-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar-selects,
+      .toolbar-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .toolbar-icons.settings {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="deviceModal" class="modal-overlay">
+    <div class="modal-panel">
+      <button class="modal-close" id="modalCloseBtn">✕</button>
+      <h1>Smartphone-Maße</h1>
+
+      <h2>Smartphones</h2>
+      <div class="table-tools">
+        <div class="sync-controls">
+          <label>
+            Listen-URL
+            <input id="syncSourceUrl" type="url" placeholder="https://example.org/smartphones.json">
+          </label>
+          <div class="icon-btn-wrapper">
+            <button id="syncDevicesBtn" class="icon-btn" title="Liste abrufen">☁</button>
+            <div class="tooltip">Liste abrufen</div>
+          </div>
+          <div class="icon-btn-wrapper">
+            <button id="loadBundledDevicesBtn" class="icon-btn" title="Beispieldaten laden">📦</button>
+            <div class="tooltip">Beispieldaten laden</div>
+          </div>
+        </div>
+        <label>
+          Liste filtern
+          <input id="deviceFilterInput" type="search" placeholder="z. B. Samsung, Pixel, Ultra">
+        </label>
+        <div id="syncMeta" class="sync-meta"></div>
+      </div>
+      <div class="device-table-scroll">
+        <table class="device-settings-table">
+          <colgroup>
+            <col class="device-col-name">
+            <col class="device-col-dimension">
+            <col class="device-col-dimension">
+            <col class="device-col-dimension">
+            <col class="device-col-action">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Höhe</th>
+              <th>Breite</th>
+              <th>Tiefe</th>
+              <th>Aktion</th>
+            </tr>
+          </thead>
+          <tbody id="deviceTableBody"></tbody>
+        </table>
+      </div>
+      <div id="deviceStatus" class="status compact"></div>
+      <div class="actions">
+        <div class="icon-btn-wrapper">
+          <button id="addDeviceBtn" class="icon-btn" title="Smartphone hinzufügen" style="margin-left: 0;">➕</button>
+          <div class="tooltip">Smartphone hinzufügen</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section class="panel">
+      <h1>Smartphone Größenvergleich</h1>
+
+      <div class="preview-toolbar">
+        <div class="toolbar-selects">
+          <label>
+            Linkes Smartphone
+            <div class="dropdown-field">
+              <input id="previewLeftInput" class="dropdown-input" type="text" list="previewLeftOptions" placeholder="Smartphone suchen oder auswählen" autocomplete="off">
+              <button id="previewLeftClearBtn" class="dropdown-clear is-hidden" type="button" title="Auswahl löschen">×</button>
+            </div>
+            <datalist id="previewLeftOptions"></datalist>
+          </label>
+          <label>
+            Rechtes Smartphone
+            <div class="dropdown-field">
+              <input id="previewRightInput" class="dropdown-input" type="text" list="previewRightOptions" placeholder="Smartphone suchen oder auswählen" autocomplete="off">
+              <button id="previewRightClearBtn" class="dropdown-clear is-hidden" type="button" title="Auswahl löschen">×</button>
+            </div>
+            <datalist id="previewRightOptions"></datalist>
+          </label>
+        </div>
+        <div class="toolbar-actions">
+          <div class="toolbar-icons">
+            <div class="icon-btn-wrapper">
+              <button id="printCurrentBtn" class="icon-btn" title="Drucken">🖨</button>
+              <div class="tooltip">Drucken</div>
+            </div>
+            <div class="icon-btn-wrapper">
+              <button id="exportCurrentBtn" class="icon-btn" title="SVG aktuelle Seite">⬇</button>
+              <div class="tooltip">SVG aktuelle Seite</div>
+            </div>
+          </div>
+          <div class="toolbar-icons settings">
+            <div class="icon-btn-wrapper">
+              <button id="editDevicesBtn" class="icon-btn" title="Maße verwalten">⚙️</button>
+              <div class="tooltip">Maße verwalten</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="note subtle">Offline nutzbar. Daten werden im Browser gespeichert.</p>
+    </section>
+
+    <section class="panel">
+      <div class="svg-footer">
+        <h2 style="margin: 0; font-size: 1rem;">Vorschau</h2>
+        <span class="badge">A4: 210 x 297 mm</span>
+      </div>
+      <div class="preview">
+        <svg id="previewSvg" viewBox="0 0 210 297" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+
+      <div id="status" class="status"></div>
+    </section>
+  </main>
+
+  <script id="bundledSmartphonesData" type="application/json">
+{
+  "smartphones": [
+    { "id": "s24", "name": "Samsung Galaxy S24", "width": 70.6, "height": 147.0, "depth": 6.5 },
+    { "id": "s24plus", "name": "Samsung Galaxy S24+", "width": 75.9, "height": 158.5, "depth": 7.2 },
+    { "id": "s24ultra", "name": "Samsung Galaxy S24 Ultra", "width": 79.0, "height": 162.8, "depth": 8.6 },
+    { "id": "a55", "name": "Samsung Galaxy A55", "width": 77.4, "height": 161.1, "depth": 8.2 },
+    { "id": "a36", "name": "Samsung Galaxy A36", "width": 78.2, "height": 162.9, "depth": 7.4 },
+    { "id": "s23", "name": "Samsung Galaxy S23", "width": 70.9, "height": 146.3, "depth": 6.3 },
+    { "id": "s23ultra", "name": "Samsung Galaxy S23 Ultra", "width": 78.1, "height": 163.4, "depth": 8.8 },
+    { "id": "pixel9pro", "name": "Google Pixel 9 Pro", "width": 72.0, "height": 152.8, "depth": 7.0 },
+    { "id": "pixel9promax", "name": "Google Pixel 9 Pro Max", "width": 76.6, "height": 162.8, "depth": 7.6 },
+    { "id": "pixel9", "name": "Google Pixel 9", "width": 68.2, "height": 152.8, "depth": 6.3 },
+    { "id": "iphone16pro", "name": "iPhone 16 Pro", "width": 71.6, "height": 147.6, "depth": 7.8 },
+    { "id": "iphone16promax", "name": "iPhone 16 Pro Max", "width": 77.8, "height": 159.9, "depth": 7.8 },
+    { "id": "iphone16", "name": "iPhone 16", "width": 70.6, "height": 147.6, "depth": 7.9 },
+    { "id": "iphone16plus", "name": "iPhone 16 Plus", "width": 77.8, "height": 159.9, "depth": 7.8 },
+    { "id": "iphone15pro", "name": "iPhone 15 Pro", "width": 70.7, "height": 147.0, "depth": 7.8 },
+    { "id": "iphone15promax", "name": "iPhone 15 Pro Max", "width": 77.0, "height": 159.9, "depth": 7.8 },
+    { "id": "iphone15", "name": "iPhone 15", "width": 70.7, "height": 147.8, "depth": 7.8 },
+    { "id": "oneplus12", "name": "OnePlus 12", "width": 74.1, "height": 164.3, "depth": 9.1 },
+    { "id": "xiaomi14ultra", "name": "Xiaomi 14 Ultra", "width": 74.6, "height": 163.2, "depth": 8.3 },
+    { "id": "samsungs25", "name": "Samsung Galaxy S25", "width": 71.6, "height": 152.9, "depth": 6.8 },
+    { "id": "samsungs25ultra", "name": "Samsung Galaxy S25 Ultra", "width": 77.8, "height": 162.8, "depth": 8.2 },
+    { "id": "pixel10pro", "name": "Google Pixel 10 Pro", "width": 72.0, "height": 152.8, "depth": 7.2 },
+    { "id": "redminote13", "name": "Redmi Note 13", "width": 76.0, "height": 160.6, "depth": 7.8 },
+    { "id": "pocomx4", "name": "POCO X4", "width": 69.5, "height": 155.1, "depth": 8.0 },
+    { "id": "motog85", "name": "Motorola Moto G85", "width": 72.5, "height": 158.5, "depth": 7.9 },
+    { "id": "nokia210", "name": "Nokia G210", "width": 73.9, "height": 164.1, "depth": 8.5 },
+    { "id": "htcdesire21", "name": "HTC Desire 21 pro", "width": 73.9, "height": 159.9, "depth": 8.5 }
+  ]
+}
+  </script>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = "smartphone-a4-planner-v1";
+      const BUNDLED_DB_URL = "./smartphones-db.json";
+      const BUNDLED_SMARTPHONES = parseBundledSmartphones();
+
+      const defaultState = {
+        devices: [
+          { id: "s24", name: "Samsung S24", width: 70.6, height: 147.0, depth: 6.5 },
+          { id: "s24plus", name: "Samsung S24+", width: 75.9, height: 158.5, depth: 7.2 },
+          { id: "pixel10", name: "Google Pixel 10", width: 72.0, height: 152.8, depth: 7.0 }
+        ],
+        pages: [
+          { leftId: "s24", rightId: "s24plus" },
+          { leftId: "pixel10", rightId: "" }
+        ],
+        syncSourceUrl: "",
+        lastSyncedAt: ""
+      };
+
+      let state = loadState();
+      let deviceFilterText = "";
+      let leftSearchText = "";
+      let rightSearchText = "";
+
+      const els = {
+        deviceTableBody: document.getElementById("deviceTableBody"),
+        previewLeftInput: document.getElementById("previewLeftInput"),
+        previewRightInput: document.getElementById("previewRightInput"),
+        previewLeftClearBtn: document.getElementById("previewLeftClearBtn"),
+        previewRightClearBtn: document.getElementById("previewRightClearBtn"),
+        previewLeftOptions: document.getElementById("previewLeftOptions"),
+        previewRightOptions: document.getElementById("previewRightOptions"),
+        previewSvg: document.getElementById("previewSvg"),
+        status: document.getElementById("status"),
+        deviceStatus: document.getElementById("deviceStatus"),
+        deviceModal: document.getElementById("deviceModal"),
+        modalCloseBtn: document.getElementById("modalCloseBtn"),
+        editDevicesBtn: document.getElementById("editDevicesBtn"),
+        addDeviceBtn: document.getElementById("addDeviceBtn"),
+        deviceFilterInput: document.getElementById("deviceFilterInput"),
+        syncSourceUrl: document.getElementById("syncSourceUrl"),
+        syncDevicesBtn: document.getElementById("syncDevicesBtn"),
+        loadBundledDevicesBtn: document.getElementById("loadBundledDevicesBtn"),
+        syncMeta: document.getElementById("syncMeta"),
+        exportCurrentBtn: document.getElementById("exportCurrentBtn"),
+        printCurrentBtn: document.getElementById("printCurrentBtn")
+      };
+
+      let currentLeftId = state.devices[0]?.id || "";
+      let currentRightId = state.devices[1]?.id || "";
+
+      bindEvents();
+      renderAll();
+      initializeDeviceSource();
+
+      async function initializeDeviceSource() {
+        if (!shouldAutoLoadBundledDevices()) {
+          return;
+        }
+        await syncDevicesFromUrl(BUNDLED_DB_URL, "JSON-Startliste automatisch geladen.", false, false);
+      }
+
+      function bindEvents() {
+        els.syncSourceUrl.value = state.syncSourceUrl || "";
+
+        els.editDevicesBtn.addEventListener("click", () => {
+          els.deviceModal.classList.add("active");
+          clearStatus("device");
+        });
+
+        els.modalCloseBtn.addEventListener("click", () => {
+          els.deviceModal.classList.remove("active");
+          clearStatus("device");
+        });
+
+        els.deviceModal.addEventListener("click", (event) => {
+          if (event.target === els.deviceModal) {
+            els.deviceModal.classList.remove("active");
+            clearStatus("device");
+          }
+        });
+
+        els.addDeviceBtn.addEventListener("click", () => {
+          const id = "id-" + Date.now().toString(36);
+          state.devices.push({ id, name: "Neues Smartphone", width: 70, height: 150, depth: 6 });
+          saveAndRender("Smartphone hinzugefügt.", false, "device");
+        });
+
+        els.deviceFilterInput.addEventListener("input", (event) => {
+          deviceFilterText = String(event.target.value || "").trim().toLowerCase();
+          renderDevicesTable();
+        });
+
+        bindPreviewInput(els.previewLeftInput, "left");
+        bindPreviewInput(els.previewRightInput, "right");
+
+        els.previewLeftClearBtn.addEventListener("click", () => {
+          clearPreviewInput("left");
+        });
+
+        els.previewRightClearBtn.addEventListener("click", () => {
+          clearPreviewInput("right");
+        });
+
+        els.exportCurrentBtn.addEventListener("click", () => {
+          const page = { leftId: currentLeftId, rightId: currentRightId };
+          const svgText = buildSvg([page], "Aktuelle Auswahl");
+          downloadSvg(svgText, "a4-smartphones-auswahl.svg");
+          setStatus("Aktuelle Auswahl als SVG exportiert.", false, "main");
+        });
+
+        els.printCurrentBtn.addEventListener("click", () => {
+          const page = { leftId: currentLeftId, rightId: currentRightId };
+          printPage(page);
+        });
+
+        els.syncDevicesBtn.addEventListener("click", async () => {
+          const sourceUrl = String(els.syncSourceUrl.value || "").trim();
+          if (!sourceUrl) {
+            setStatus("Bitte zuerst eine Listen-URL eingeben.", true, "device");
+            return;
+          }
+          await syncDevicesFromUrl(sourceUrl, "Remote-Liste synchronisiert.");
+        });
+
+        els.loadBundledDevicesBtn.addEventListener("click", async () => {
+          await syncDevicesFromUrl(BUNDLED_DB_URL, "Beispieldaten synchronisiert.", false);
+        });
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) {
+            return JSON.parse(JSON.stringify(defaultState));
+          }
+          const parsed = JSON.parse(raw);
+          if (!parsed || !Array.isArray(parsed.devices) || !Array.isArray(parsed.pages)) {
+            return JSON.parse(JSON.stringify(defaultState));
+          }
+          if (typeof parsed.syncSourceUrl !== "string") {
+            parsed.syncSourceUrl = "";
+          }
+          if (typeof parsed.lastSyncedAt !== "string") {
+            parsed.lastSyncedAt = "";
+          }
+          return parsed;
+        } catch (_err) {
+          return JSON.parse(JSON.stringify(defaultState));
+        }
+      }
+
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+
+      function saveAndRender(message, isError, target) {
+        normalizeState();
+        saveState();
+        renderAll();
+        if (message) {
+          setStatus(message, isError, target);
+        }
+      }
+
+      function normalizeState() {
+        state.devices = state.devices.filter((d) => d && d.id);
+        for (const device of state.devices) {
+          if (typeof device.depth === "undefined" && typeof device.radius !== "undefined") {
+            device.depth = device.radius;
+          }
+          if (typeof device.radius !== "undefined") {
+            delete device.radius;
+          }
+          if (typeof device.depth === "undefined") {
+            device.depth = 0;
+          }
+        }
+        if (state.devices.length === 0) {
+          state.devices.push({ id: "fallback", name: "Fallback Phone", width: 70, height: 150, depth: 6 });
+        }
+        if (typeof state.syncSourceUrl !== "string") {
+          state.syncSourceUrl = "";
+        }
+        if (typeof state.lastSyncedAt !== "string") {
+          state.lastSyncedAt = "";
+        }
+
+        const availableIds = new Set(state.devices.map((device) => device.id));
+        if (!availableIds.has(currentLeftId)) {
+          currentLeftId = state.devices[0]?.id || "";
+        }
+        if (!availableIds.has(currentRightId)) {
+          currentRightId = state.devices[1]?.id || "";
+        }
+      }
+
+      function renderAll() {
+        renderDevicesTable();
+        renderPreviewInputs();
+        renderPreview();
+        renderSyncMeta();
+      }
+
+      function renderDevicesTable() {
+        const filteredDevices = getFilteredDevices(deviceFilterText);
+        const rows = filteredDevices.map((device) => {
+          return ""
+            + "<tr data-id=\"" + escapeHtml(device.id) + "\">"
+            + "<td><input class=\"device-name-input\" data-field=\"name\" value=\"" + escapeHtml(device.name) + "\"></td>"
+            + "<td><input class=\"device-number-input\" type=\"number\" min=\"1\" step=\"0.1\" data-field=\"height\" value=\"" + Number(device.height).toFixed(1) + "\"></td>"
+            + "<td><input class=\"device-number-input\" type=\"number\" min=\"1\" step=\"0.1\" data-field=\"width\" value=\"" + Number(device.width).toFixed(1) + "\"></td>"
+            + "<td><input class=\"device-number-input\" type=\"number\" min=\"0\" step=\"0.1\" data-field=\"depth\" value=\"" + Number(device.depth || 0).toFixed(1) + "\"></td>"
+            + "<td><button class=\"icon-btn\" data-action=\"delete-device\" title=\"Löschen\" style=\"width: 28px; height: 28px; padding: 0; font-size: 14px;\">🗑</button></td>"
+            + "</tr>";
+        }).join("");
+
+        els.deviceTableBody.innerHTML = rows || "<tr><td colspan=\"5\">Keine Smartphones zum Filter gefunden.</td></tr>";
+
+        els.deviceTableBody.querySelectorAll("input").forEach((input) => {
+          input.addEventListener("change", onDeviceInputChange);
+        });
+
+        els.deviceTableBody.querySelectorAll("button[data-action='delete-device']").forEach((button) => {
+          button.addEventListener("click", (event) => {
+            const tr = event.target.closest("tr");
+            if (!tr) {
+              return;
+            }
+            if (state.devices.length <= 1) {
+              setStatus("Mindestens ein Smartphone muss bleiben.", true, "device");
+              return;
+            }
+            const id = tr.dataset.id;
+            state.devices = state.devices.filter((d) => d.id !== id);
+            saveAndRender("Smartphone entfernt.", false, "device");
+          });
+        });
+      }
+
+      function onDeviceInputChange(event) {
+        const tr = event.target.closest("tr");
+        if (!tr) {
+          return;
+        }
+        const id = tr.dataset.id;
+        const field = event.target.dataset.field;
+        const device = state.devices.find((d) => d.id === id);
+        if (!device || !field) {
+          return;
+        }
+
+        if (field === "name") {
+          device.name = String(event.target.value || "").trim() || "Ohne Name";
+        } else {
+          const num = Number(event.target.value);
+          if (!Number.isFinite(num)) {
+            setStatus("Bitte gültige Zahlen eingeben.", true, "device");
+            return;
+          }
+          device[field] = Math.max(0, num);
+        }
+        saveAndRender("Smartphone aktualisiert.", false, "device");
+      }
+
+      function renderPreviewInputs() {
+        els.previewLeftOptions.innerHTML = buildDeviceOptions(leftSearchText, currentLeftId);
+        els.previewRightOptions.innerHTML = buildDeviceOptions(rightSearchText, currentRightId);
+
+        if (document.activeElement !== els.previewLeftInput) {
+          els.previewLeftInput.value = getDeviceDisplayValue(currentLeftId);
+        }
+        if (document.activeElement !== els.previewRightInput) {
+          els.previewRightInput.value = getDeviceDisplayValue(currentRightId);
+        }
+
+        updatePreviewClearButtons();
+      }
+
+      function buildDeviceOptions(searchText, selectedId) {
+        const filteredDevices = getFilteredDevices(searchText);
+        const hasSelected = filteredDevices.some((device) => device.id === selectedId);
+        const optionDevices = hasSelected
+          ? filteredDevices
+          : filteredDevices.concat(state.devices.filter((device) => device.id === selectedId));
+
+        return optionDevices.map((device) => {
+          return "<option value=\"" + escapeHtml(device.name) + "\"></option>";
+        }).join("");
+      }
+
+      function bindPreviewInput(input, side) {
+        input.addEventListener("input", (event) => {
+          const rawValue = String(event.target.value || "").trim();
+          if (side === "left") {
+            leftSearchText = rawValue.toLowerCase();
+          } else {
+            rightSearchText = rawValue.toLowerCase();
+          }
+
+          const matchedDevice = findDeviceByQuery(rawValue);
+          if (rawValue === "") {
+            setCurrentDeviceId(side, "");
+            renderPreviewInputs();
+            renderPreview();
+            return;
+          }
+
+          if (matchedDevice) {
+            setCurrentDeviceId(side, matchedDevice.id);
+            renderPreviewInputs();
+            renderPreview();
+            return;
+          }
+
+          updatePreviewClearButtons();
+          renderPreviewInputs();
+        });
+
+        input.addEventListener("change", () => {
+          commitPreviewInput(side);
+        });
+
+        input.addEventListener("blur", () => {
+          commitPreviewInput(side);
+        });
+      }
+
+      function commitPreviewInput(side) {
+        const input = side === "left" ? els.previewLeftInput : els.previewRightInput;
+        const rawValue = String(input.value || "").trim();
+        const matchedDevice = findDeviceByQuery(rawValue);
+
+        if (rawValue === "") {
+          setCurrentDeviceId(side, "");
+        } else if (matchedDevice) {
+          setCurrentDeviceId(side, matchedDevice.id);
+        }
+
+        if (side === "left") {
+          leftSearchText = "";
+        } else {
+          rightSearchText = "";
+        }
+
+        renderPreviewInputs();
+        renderPreview();
+      }
+
+      function clearPreviewInput(side) {
+        const input = side === "left" ? els.previewLeftInput : els.previewRightInput;
+        input.value = "";
+        if (side === "left") {
+          leftSearchText = "";
+        } else {
+          rightSearchText = "";
+        }
+        setCurrentDeviceId(side, "");
+        renderPreviewInputs();
+        renderPreview();
+        input.focus();
+      }
+
+      function setCurrentDeviceId(side, value) {
+        if (side === "left") {
+          currentLeftId = value;
+          return;
+        }
+        currentRightId = value;
+      }
+
+      function getDeviceDisplayValue(deviceId) {
+        const device = state.devices.find((entry) => entry.id === deviceId);
+        return device ? device.name : "";
+      }
+
+      function updatePreviewClearButtons() {
+        togglePreviewClearButton(els.previewLeftInput, els.previewLeftClearBtn);
+        togglePreviewClearButton(els.previewRightInput, els.previewRightClearBtn);
+      }
+
+      function togglePreviewClearButton(input, button) {
+        const hasValue = String(input.value || "").trim().length > 0;
+        button.classList.toggle("is-hidden", !hasValue);
+      }
+
+      function findDeviceByQuery(query) {
+        const normalizedQuery = String(query || "").trim().toLowerCase();
+        if (!normalizedQuery) {
+          return null;
+        }
+
+        return state.devices.find((device) => {
+          return String(device.name || "").trim().toLowerCase() === normalizedQuery
+            || String(device.id || "").trim().toLowerCase() === normalizedQuery;
+        }) || null;
+      }
+
+      function getFilteredDevices(searchText) {
+        const query = String(searchText || "").trim().toLowerCase();
+        if (!query) {
+          return state.devices.slice().sort(compareDevicesByName);
+        }
+
+        return state.devices
+          .filter((device) => {
+            const haystack = [device.name, device.id].join(" ").toLowerCase();
+            return haystack.includes(query);
+          })
+          .sort(compareDevicesByName);
+      }
+
+      function compareDevicesByName(a, b) {
+        return String(a.name || "").localeCompare(String(b.name || ""), "de", { sensitivity: "base" });
+      }
+
+      function renderSyncMeta() {
+        const parts = [];
+        if (state.syncSourceUrl) {
+          parts.push("Quelle: " + state.syncSourceUrl);
+        }
+        if (state.lastSyncedAt) {
+          parts.push("Letzte Synchronisierung: " + formatDateTime(state.lastSyncedAt));
+        }
+        els.syncMeta.textContent = parts.join(" | ") || "Noch keine Synchronisierung ausgeführt.";
+      }
+
+      async function syncDevicesFromUrl(sourceUrl, successMessage, persistUrl = true, announceLoading = true) {
+        if (announceLoading) {
+          setStatus("Liste wird abgerufen...", false, "device");
+        }
+
+        if (isBundledDataUrl(sourceUrl)) {
+          if (BUNDLED_SMARTPHONES.length === 0) {
+            setStatus("Gebündelte Smartphone-Liste ist leer oder ungültig.", true, "device");
+            return;
+          }
+
+          state.devices = BUNDLED_SMARTPHONES.slice();
+          state.lastSyncedAt = new Date().toISOString();
+          if (persistUrl) {
+            state.syncSourceUrl = sourceUrl;
+          }
+          els.syncSourceUrl.value = persistUrl ? sourceUrl : (state.syncSourceUrl || "");
+          saveAndRender(successMessage + " " + BUNDLED_SMARTPHONES.length + " Modelle verfügbar.", false, "device");
+          return;
+        }
+
+        try {
+          const response = await fetch(sourceUrl, { cache: "no-store" });
+          if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+          }
+
+          const payload = await response.json();
+          const importedDevices = normalizeImportedDevices(payload);
+          if (importedDevices.length === 0) {
+            throw new Error("Keine Smartphones in der Quelle gefunden.");
+          }
+
+          state.devices = importedDevices;
+          state.lastSyncedAt = new Date().toISOString();
+          if (persistUrl) {
+            state.syncSourceUrl = sourceUrl;
+          }
+          els.syncSourceUrl.value = persistUrl ? sourceUrl : (state.syncSourceUrl || "");
+          saveAndRender(successMessage + " " + importedDevices.length + " Modelle verfügbar.", false, "device");
+        } catch (error) {
+          setStatus("Synchronisierung fehlgeschlagen: " + getErrorMessage(error), true, "device");
+        }
+      }
+
+      function shouldAutoLoadBundledDevices() {
+        if (state.lastSyncedAt) {
+          return false;
+        }
+        if (state.syncSourceUrl) {
+          return false;
+        }
+        if (state.devices.length !== defaultState.devices.length) {
+          return false;
+        }
+
+        return state.devices.every((device, index) => {
+          const fallback = defaultState.devices[index];
+          return fallback
+            && device.id === fallback.id
+            && device.name === fallback.name
+            && Number(device.width) === Number(fallback.width)
+            && Number(device.height) === Number(fallback.height)
+            && Number(device.depth || 0) === Number(fallback.depth || 0);
+        });
+      }
+
+      function isBundledDataUrl(sourceUrl) {
+        const normalized = String(sourceUrl || "").trim();
+        return normalized === BUNDLED_DB_URL
+          || normalized.endsWith("/smartphones-db.json")
+          || normalized.endsWith("\\smartphones-db.json")
+          || normalized.endsWith("smartphones-db.json");
+      }
+
+      function parseBundledSmartphones() {
+        const node = document.getElementById("bundledSmartphonesData");
+        if (!node) {
+          return [];
+        }
+
+        try {
+          return normalizeImportedDevices(JSON.parse(node.textContent || "{}"));
+        } catch (_error) {
+          return [];
+        }
+      }
+
+      function normalizeImportedDevices(payload) {
+        const list = Array.isArray(payload)
+          ? payload
+          : (payload && Array.isArray(payload.smartphones) ? payload.smartphones : []);
+
+        return list
+          .map((entry, index) => normalizeImportedDevice(entry, index))
+          .filter(Boolean)
+          .sort(compareDevicesByName);
+      }
+
+      function normalizeImportedDevice(entry, index) {
+        if (!entry || typeof entry !== "object") {
+          return null;
+        }
+
+        const name = String(entry.name || "").trim();
+        const width = Number(entry.width);
+        const height = Number(entry.height);
+        const depth = Number(typeof entry.depth !== "undefined" ? entry.depth : entry.radius);
+        if (!name || !Number.isFinite(width) || !Number.isFinite(height)) {
+          return null;
+        }
+
+        const rawId = String(entry.id || slugify(name) || ("device-" + index)).trim();
+        return {
+          id: rawId,
+          name,
+          width: Math.max(0, width),
+          height: Math.max(0, height),
+          depth: Number.isFinite(depth) ? Math.max(0, depth) : 0
+        };
+      }
+
+      function slugify(value) {
+        return String(value || "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+      }
+
+      function getErrorMessage(error) {
+        return error && error.message ? error.message : "Unbekannter Fehler";
+      }
+
+      function formatDateTime(value) {
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+          return value;
+        }
+        return date.toLocaleString("de-DE");
+      }
+
+      function renderPreview() {
+        const leftDevice = state.devices.find(d => d.id === currentLeftId) || null;
+        const rightDevice = state.devices.find(d => d.id === currentRightId) || null;
+        const page = { leftId: currentLeftId, rightId: currentRightId };
+        const svgText = buildSvg([page], "Aktuelle Auswahl");
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(svgText, "image/svg+xml");
+        const node = doc.documentElement;
+
+        while (els.previewSvg.firstChild) {
+          els.previewSvg.removeChild(els.previewSvg.firstChild);
+        }
+
+        const copyChildren = node.childNodes;
+        for (let i = 0; i < copyChildren.length; i += 1) {
+          els.previewSvg.appendChild(document.importNode(copyChildren[i], true));
+        }
+        els.previewSvg.setAttribute("viewBox", node.getAttribute("viewBox"));
+      }
+
+      function buildSvg(pages, title) {
+        const pageGap = 12;
+        const width = 210;
+        const pageHeight = 297;
+        const totalHeight = pages.length * pageHeight + (pages.length - 1) * pageGap;
+
+        const header = [];
+        header.push("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        header.push("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" + width + "mm\" height=\"" + totalHeight + "mm\" viewBox=\"0 0 " + width + " " + totalHeight + "\">");
+        header.push("<defs>");
+        header.push("<style>");
+        header.push(".title{font:700 5px 'Trebuchet MS',sans-serif;fill:#12313d;letter-spacing:.4px;}");
+        header.push(".meta{font:400 3.1px 'Trebuchet MS',sans-serif;fill:#2c4d5a;}");
+        header.push(".name{font:700 3.4px 'Trebuchet MS',sans-serif;fill:#0f2f3b;}");
+        header.push(".dim{font:400 2.8px 'Trebuchet MS',sans-serif;fill:#2f4a56;}");
+        header.push("</style>");
+        header.push("</defs>");
+
+        pages.forEach((page, index) => {
+          const yOffset = index * (pageHeight + pageGap);
+          header.push(renderSinglePageSvg(page, yOffset, title + " / Seite " + (index + 1)));
+        });
+
+        header.push("</svg>");
+        return header.join("\n");
+      }
+
+      function renderSinglePageSvg(page, yOffset, pageTitle) {
+        const a4x = 0;
+        const a4y = yOffset;
+        const a4w = 210;
+        const a4h = 297;
+
+        const margin = 10;
+        const gap = 10;
+        const slotW = (a4w - margin * 2 - gap);
+        const eachW = slotW / 2;
+        const slotH = a4h - margin * 2;
+
+        const left = state.devices.find((d) => d.id === page.leftId) || null;
+        const right = state.devices.find((d) => d.id === page.rightId) || null;
+
+        const svg = [];
+        svg.push("<g transform=\"translate(0," + a4y + ")\">");
+        svg.push("<rect x=\"" + a4x + "\" y=\"0\" width=\"" + a4w + "\" height=\"" + a4h + "\" fill=\"#fff\" stroke=\"#bccbd1\" stroke-width=\"0.5\"/>");
+
+        svg.push(renderSlot(left, margin, margin, eachW, slotH));
+        svg.push(renderSlot(right, margin + eachW + gap, margin, eachW, slotH));
+
+        svg.push("</g>");
+        return svg.join("\n");
+      }
+
+      function renderSlot(device, x, y, w, h) {
+        const slot = [];
+        slot.push("<rect x=\"" + x + "\" y=\"" + y + "\" width=\"" + w + "\" height=\"" + h + "\" fill=\"#f9fcfd\" stroke=\"#d9e5ea\" stroke-width=\"0.4\"/>");
+
+        const pad = 5;
+        if (!device) {
+          slot.push("<rect x=\"" + (x + pad) + "\" y=\"" + (y + 12) + "\" width=\"" + (w - pad * 2) + "\" height=\"" + (h - 18) + "\" fill=\"#fff\" stroke=\"#cdd9df\" stroke-dasharray=\"2 2\" stroke-width=\"0.4\"/>");
+          slot.push("<text x=\"" + (x + w / 2) + "\" y=\"" + (y + h / 2) + "\" text-anchor=\"middle\" class=\"meta\">kein Smartphone</text>");
+          return slot.join("\n");
+        }
+
+        const availW = w - pad * 2;
+        const availH = h - 30;
+        const fitScale = Math.min(1, availW / device.width, availH / device.height);
+
+        const phoneW = device.width * fitScale;
+        const phoneH = device.height * fitScale;
+        const phoneX = x + (w - phoneW) / 2;
+        const phoneY = y + 15 + (availH - phoneH) / 2;
+        const r = Math.max(2.2, Math.min(phoneW, phoneH) * 0.06);
+        const depthMm = Math.max(0, Number(device.depth || 0));
+
+        slot.push("<rect x=\"" + phoneX.toFixed(2) + "\" y=\"" + phoneY.toFixed(2) + "\" width=\"" + phoneW.toFixed(2) + "\" height=\"" + phoneH.toFixed(2) + "\" rx=\"" + r.toFixed(2) + "\" ry=\"" + r.toFixed(2) + "\" fill=\"#deebf0\" stroke=\"#44626f\" stroke-width=\"0.6\"/>");
+        slot.push("<rect x=\"" + (phoneX + phoneW * 0.07).toFixed(2) + "\" y=\"" + (phoneY + phoneH * 0.08).toFixed(2) + "\" width=\"" + (phoneW * 0.86).toFixed(2) + "\" height=\"" + (phoneH * 0.84).toFixed(2) + "\" rx=\"" + (r * 0.7).toFixed(2) + "\" ry=\"" + (r * 0.7).toFixed(2) + "\" fill=\"#f4fafc\" stroke=\"#8aa1ab\" stroke-width=\"0.35\"/>");
+
+        const innerLeft = phoneX + phoneW * 0.14;
+        const innerRight = phoneX + phoneW * 0.86;
+        const innerTop = phoneY + phoneH * 0.14;
+        const innerBottom = phoneY + phoneH * 0.86;
+        const arrow = Math.max(1.1, Math.min(phoneW, phoneH) * 0.03);
+
+        slot.push("<text x=\"" + (phoneX + phoneW * 0.07 + 2).toFixed(2) + "\" y=\"" + (phoneY + phoneH * 0.08 + 5).toFixed(2) + "\" class=\"name\" font-size=\"" + Math.max(2.5, phoneW * 0.15).toFixed(2) + "\">" + escapeHtml(device.name) + "</text>");
+
+        const widthArrowY = phoneY + phoneH * 0.33;
+        slot.push("<line x1=\"" + innerLeft.toFixed(2) + "\" y1=\"" + widthArrowY.toFixed(2) + "\" x2=\"" + innerRight.toFixed(2) + "\" y2=\"" + widthArrowY.toFixed(2) + "\" stroke=\"#5d7682\" stroke-width=\"0.35\"/>");
+        slot.push("<polygon points=\"" + innerLeft.toFixed(2) + "," + widthArrowY.toFixed(2) + " " + (innerLeft + arrow).toFixed(2) + "," + (widthArrowY - arrow * 0.65).toFixed(2) + " " + (innerLeft + arrow).toFixed(2) + "," + (widthArrowY + arrow * 0.65).toFixed(2) + "\" fill=\"#5d7682\"/>");
+        slot.push("<polygon points=\"" + innerRight.toFixed(2) + "," + widthArrowY.toFixed(2) + " " + (innerRight - arrow).toFixed(2) + "," + (widthArrowY - arrow * 0.65).toFixed(2) + " " + (innerRight - arrow).toFixed(2) + "," + (widthArrowY + arrow * 0.65).toFixed(2) + "\" fill=\"#5d7682\"/>");
+        slot.push("<text x=\"" + (phoneX + phoneW / 2).toFixed(2) + "\" y=\"" + (widthArrowY - 1.6).toFixed(2) + "\" text-anchor=\"middle\" class=\"dim\">Breite: " + formatMm(device.width) + " mm</text>");
+
+        const heightArrowX = phoneX + phoneW * 0.33;
+        slot.push("<line x1=\"" + heightArrowX.toFixed(2) + "\" y1=\"" + innerTop.toFixed(2) + "\" x2=\"" + heightArrowX.toFixed(2) + "\" y2=\"" + innerBottom.toFixed(2) + "\" stroke=\"#5d7682\" stroke-width=\"0.35\"/>");
+        slot.push("<polygon points=\"" + heightArrowX.toFixed(2) + "," + innerTop.toFixed(2) + " " + (heightArrowX - arrow * 0.65).toFixed(2) + "," + (innerTop + arrow).toFixed(2) + " " + (heightArrowX + arrow * 0.65).toFixed(2) + "," + (innerTop + arrow).toFixed(2) + "\" fill=\"#5d7682\"/>");
+        slot.push("<polygon points=\"" + heightArrowX.toFixed(2) + "," + innerBottom.toFixed(2) + " " + (heightArrowX - arrow * 0.65).toFixed(2) + "," + (innerBottom - arrow).toFixed(2) + " " + (heightArrowX + arrow * 0.65).toFixed(2) + "," + (innerBottom - arrow).toFixed(2) + "\" fill=\"#5d7682\"/>");
+        slot.push("<text x=\"" + (heightArrowX + 2.5).toFixed(2) + "\" y=\"" + ((innerTop + innerBottom) / 2).toFixed(2) + "\" class=\"dim\" transform=\"rotate(-90 " + (heightArrowX + 2.5).toFixed(2) + " " + ((innerTop + innerBottom) / 2).toFixed(2) + ")\">Höhe: " + formatMm(device.height) + " mm</text>");
+
+        const depthY = phoneY + phoneH * 0.9;
+        slot.push("<text x=\"" + (phoneX + phoneW / 2).toFixed(2) + "\" y=\"" + depthY.toFixed(2) + "\" text-anchor=\"middle\" class=\"dim\">Tiefe: " + formatMm(depthMm) + " mm</text>");
+
+        if (fitScale < 1) {
+          slot.push("<text x=\"" + (x + w / 2).toFixed(2) + "\" y=\"" + (y + h - 9).toFixed(2) + "\" text-anchor=\"middle\" class=\"dim\">Hinweis: verkleinert auf " + Math.round(fitScale * 100) + "%</text>");
+        }
+
+        return slot.join("\n");
+      }
+
+      function downloadSvg(svgText, filename) {
+        const blob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function printPage(page) {
+        if (!page) {
+          setStatus("Keine Auswahl zum Drucken vorhanden.", true, "main");
+          return;
+        }
+
+        const svgText = buildSvg([page], "Aktuelle Auswahl");
+        const printWindow = window.open("", "_blank", "width=900,height=1200");
+        if (!printWindow) {
+          setStatus("Druckfenster wurde blockiert. Bitte Pop-ups erlauben.", true, "main");
+          return;
+        }
+
+        const html = "<!doctype html>"
+          + "<html><head><meta charset=\"utf-8\">"
+          + "<title>Druckansicht</title>"
+          + "<style>"
+          + "@page { size: A4 portrait; margin: 0; }"
+          + "html,body{margin:0;padding:0;background:#fff;}"
+          + "body{display:flex;justify-content:center;align-items:flex-start;}"
+          + "svg{width:210mm;height:297mm;display:block;}"
+          + "</style></head><body>"
+          + svgText
+          + "<script>window.onload=function(){window.focus();window.print();};<\/script>"
+          + "</body></html>";
+
+        printWindow.document.open();
+        printWindow.document.write(html);
+        printWindow.document.close();
+        setStatus("Druckansicht für aktuelle Seite geöffnet.", false, "main");
+      }
+
+      function setStatus(text, isError, target) {
+        const statusEl = target === "device" ? els.deviceStatus : els.status;
+        statusEl.textContent = text || "";
+        statusEl.style.color = isError ? "#9f2f2f" : "#1d7f3f";
+      }
+
+      function clearStatus(target) {
+        setStatus("", false, target);
+      }
+
+      function formatMm(num) {
+        return Number(num).toFixed(1);
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+    })();
+  </script>
+</body>
+</html>
