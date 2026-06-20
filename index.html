@@ -70,6 +70,28 @@
       font-size: clamp(1.3rem, 1.2rem + 1vw, 2rem);
     }
 
+    .hero-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+      min-width: 0;
+    }
+
+    .hero-head h1 {
+      margin: 0;
+    }
+
+    .hero-logo {
+      display: block;
+      width: auto;
+      height: clamp(30px, 4vw, 44px);
+      max-width: min(180px, 32vw);
+      object-fit: contain;
+      flex: 0 0 auto;
+      cursor: zoom-in;
+    }
+
     h2 {
       margin: 8px 0 10px;
       font-size: 1.08rem;
@@ -448,6 +470,21 @@
       transform: scale(1.2);
     }
 
+    .logo-modal-panel {
+      max-width: min(92vw, 900px);
+      width: min(92vw, 900px);
+      padding: 18px;
+    }
+
+    .logo-modal-image {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      max-height: 78vh;
+      object-fit: contain;
+      margin: 0 auto;
+    }
+
     .icon-btn {
       position: relative;
       width: 40px;
@@ -639,9 +676,25 @@
     </div>
   </div>
 
+  <div id="logoModal" class="modal-overlay">
+    <div class="modal-panel logo-modal-panel">
+      <button class="modal-close" id="logoModalCloseBtn">✕</button>
+      <img id="logoModalImage" class="logo-modal-image" src="./phoneFootprintStudio.png" alt="Phone Footprint Studio Logo">
+    </div>
+  </div>
+
   <main class="wrap">
     <section class="panel">
-      <h1>Smartphone Größenvergleich</h1>
+      <div class="hero-head">
+        <img
+          id="heroLogo"
+          class="hero-logo"
+          src="./phoneFootprintStudio.png"
+          alt="Phone Footprint Studio"
+          onerror="this.style.display='none'"
+        >
+        <h1>Phone-Footprint-Studio</h1>
+      </div>
 
       <div class="preview-toolbar">
         <div class="toolbar-selects">
@@ -765,6 +818,10 @@
         previewLeftOptions: document.getElementById("previewLeftOptions"),
         previewRightOptions: document.getElementById("previewRightOptions"),
         previewSvg: document.getElementById("previewSvg"),
+        heroLogo: document.getElementById("heroLogo"),
+        logoModal: document.getElementById("logoModal"),
+        logoModalImage: document.getElementById("logoModalImage"),
+        logoModalCloseBtn: document.getElementById("logoModalCloseBtn"),
         status: document.getElementById("status"),
         deviceStatus: document.getElementById("deviceStatus"),
         deviceModal: document.getElementById("deviceModal"),
@@ -796,6 +853,27 @@
 
       function bindEvents() {
         els.syncSourceUrl.value = state.syncSourceUrl || "";
+
+        els.heroLogo.addEventListener("click", () => {
+          if (els.heroLogo.style.display === "none") {
+            return;
+          }
+          els.logoModal.classList.add("active");
+        });
+
+        els.logoModalCloseBtn.addEventListener("click", () => {
+          els.logoModal.classList.remove("active");
+        });
+
+        els.logoModal.addEventListener("click", (event) => {
+          if (event.target === els.logoModal) {
+            els.logoModal.classList.remove("active");
+          }
+        });
+
+        els.logoModalImage.addEventListener("error", () => {
+          els.logoModal.classList.remove("active");
+        });
 
         els.editDevicesBtn.addEventListener("click", () => {
           els.deviceModal.classList.add("active");
