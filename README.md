@@ -67,4 +67,4 @@ Die Geräteliste kann entweder direkt ein Array sein oder ein Objekt mit dem Fel
 
 ## Lizenz
 
-Dieses Projekt steht unter der Unlicense und wird `AS IS` ohne Gewähr bereitgestellt. Details stehen in `LICENSE`.
+Dieses Projekt steht unter der MIT Lizenz und wird `AS IS` ohne Gewähr bereitgestellt. Details stehen in `LICENSE`.
