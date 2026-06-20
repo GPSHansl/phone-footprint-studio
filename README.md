@@ -15,9 +15,9 @@ Die Anwendung läuft ohne Build-Schritt direkt im Browser. Geräte können lokal
 
 ## Projektdateien
 
-- `index.html` enthält die komplette Anwendung inklusive eingebetteter Beispieldaten
-- `smartphones-db.json` enthält eine externe JSON-Liste mit Beispielgeräten
-- `LICENSE` enthält die Public-Domain-Lizenz mit `AS IS`-Hinweis
+- [`index.html`](https://github.com/GPSHansl/phone-footprint-studio/raw/refs/heads/main/index.html) enthält die komplette Anwendung inklusive eingebetteter Beispieldaten
+- [`smartphones-db.json`](https://github.com/GPSHansl/phone-footprint-studio/raw/refs/heads/main/smartphones-db.json) enthält eine externe JSON-Liste mit Beispielgeräten
+- [`LICENSE`](https://github.com/GPSHansl/phone-footprint-studio/raw/refs/heads/main/LICENSE) enthält die MIT-Lizenz mit `AS IS`-Hinweis
 
 ## Schnellstart
 
