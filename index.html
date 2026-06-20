@@ -92,6 +92,27 @@
       cursor: zoom-in;
     }
 
+    .logo-fallback {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      color: var(--brand);
+      background: linear-gradient(180deg, #eef8fa, #dcedf2);
+      border: 1px solid #b9d5de;
+    }
+
+    .logo-fallback.is-hidden {
+      display: none;
+    }
+
+    .hero-logo-fallback {
+      width: clamp(30px, 4vw, 44px);
+      height: clamp(30px, 4vw, 44px);
+      border-radius: 12px;
+      font-size: clamp(1rem, 1rem + 0.6vw, 1.5rem);
+    }
+
     h2 {
       margin: 8px 0 10px;
       font-size: 1.08rem;
@@ -476,6 +497,23 @@
       padding: 18px;
     }
 
+    .logo-modal-copy {
+      margin: 4px 32px 14px 0;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #35515d;
+    }
+
+    .logo-modal-stage {
+      display: grid;
+      place-items: center;
+      min-height: 220px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #f7fbfd, #edf5f7);
+      border: 1px solid #d8e6eb;
+      padding: 18px;
+    }
+
     .logo-modal-image {
       display: block;
       width: 100%;
@@ -483,6 +521,13 @@
       max-height: 78vh;
       object-fit: contain;
       margin: 0 auto;
+    }
+
+    .logo-modal-fallback {
+      width: min(44vw, 220px);
+      aspect-ratio: 1;
+      border-radius: 28px;
+      font-size: clamp(3rem, 7vw, 6rem);
     }
 
     .icon-btn {
@@ -679,19 +724,24 @@
   <div id="logoModal" class="modal-overlay">
     <div class="modal-panel logo-modal-panel">
       <button class="modal-close" id="logoModalCloseBtn">✕</button>
-      <img id="logoModalImage" class="logo-modal-image" src="./phoneFootprintStudio.png" alt="Phone Footprint Studio Logo">
+      <h2>Phone-Footprint-Studio</h2>
+        <p class="logo-modal-copy">Vergleiche Smartphone-Größen direkt im Browser, stelle zwei Modelle auf einer A4-Vorschau gegenüber, pflege eigene Gerätedaten, lade JSON-Listen nach und exportiere das Ergebnis als SVG oder Druckansicht. Die Anwendung ist bewusst leichtgewichtig, direkt nutzbar und ideal, um neue Geräte schnell gegeneinander auszuprobieren.</p>
+      <div class="logo-modal-stage">
+        <img id="logoModalImage" class="logo-modal-image" src="./phoneFootprintStudio.png" alt="Phone Footprint Studio Logo">
+        <div id="logoModalFallback" class="logo-fallback logo-modal-fallback is-hidden" aria-hidden="true">👣</div>
+      </div>
     </div>
   </div>
 
   <main class="wrap">
     <section class="panel">
       <div class="hero-head">
+        <div id="heroLogoFallback" class="logo-fallback hero-logo-fallback is-hidden" aria-hidden="true">👣</div>
         <img
           id="heroLogo"
           class="hero-logo"
           src="./phoneFootprintStudio.png"
           alt="Phone Footprint Studio"
-          onerror="this.style.display='none'"
         >
         <h1>Phone-Footprint-Studio</h1>
       </div>
@@ -819,8 +869,10 @@
         previewRightOptions: document.getElementById("previewRightOptions"),
         previewSvg: document.getElementById("previewSvg"),
         heroLogo: document.getElementById("heroLogo"),
+        heroLogoFallback: document.getElementById("heroLogoFallback"),
         logoModal: document.getElementById("logoModal"),
         logoModalImage: document.getElementById("logoModalImage"),
+        logoModalFallback: document.getElementById("logoModalFallback"),
         logoModalCloseBtn: document.getElementById("logoModalCloseBtn"),
         status: document.getElementById("status"),
         deviceStatus: document.getElementById("deviceStatus"),
@@ -854,12 +906,16 @@
       function bindEvents() {
         els.syncSourceUrl.value = state.syncSourceUrl || "";
 
-        els.heroLogo.addEventListener("click", () => {
-          if (els.heroLogo.style.display === "none") {
-            return;
-          }
-          els.logoModal.classList.add("active");
+        els.heroLogo.addEventListener("error", () => {
+          setLogoAvailability(false);
         });
+
+        els.heroLogo.addEventListener("load", () => {
+          setLogoAvailability(true);
+        });
+
+        els.heroLogo.addEventListener("click", openLogoModal);
+        els.heroLogoFallback.addEventListener("click", openLogoModal);
 
         els.logoModalCloseBtn.addEventListener("click", () => {
           els.logoModal.classList.remove("active");
@@ -872,7 +928,13 @@
         });
 
         els.logoModalImage.addEventListener("error", () => {
-          els.logoModal.classList.remove("active");
+          els.logoModalImage.style.display = "none";
+          els.logoModalFallback.classList.remove("is-hidden");
+        });
+
+        els.logoModalImage.addEventListener("load", () => {
+          els.logoModalImage.style.display = "block";
+          els.logoModalFallback.classList.add("is-hidden");
         });
 
         els.editDevicesBtn.addEventListener("click", () => {
@@ -938,6 +1000,21 @@
         els.loadBundledDevicesBtn.addEventListener("click", async () => {
           await syncDevicesFromUrl(BUNDLED_DB_URL, "Beispieldaten synchronisiert.", false);
         });
+
+        if (els.heroLogo.complete) {
+          setLogoAvailability(els.heroLogo.naturalWidth > 0);
+        }
+      }
+
+      function openLogoModal() {
+        els.logoModal.classList.add("active");
+      }
+
+      function setLogoAvailability(isAvailable) {
+        els.heroLogo.style.display = isAvailable ? "block" : "none";
+        els.heroLogoFallback.classList.toggle("is-hidden", isAvailable);
+        els.logoModalImage.style.display = isAvailable ? "block" : "none";
+        els.logoModalFallback.classList.toggle("is-hidden", isAvailable);
       }
 
       function loadState() {
