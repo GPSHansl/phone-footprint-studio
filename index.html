@@ -492,8 +492,8 @@
     }
 
     .logo-modal-panel {
-      max-width: min(92vw, 900px);
-      width: min(92vw, 900px);
+      max-width: min(92vw, 600px);
+      width: min(92vw, 600px);
       padding: 18px;
     }
 
@@ -507,7 +507,7 @@
     .logo-modal-stage {
       display: grid;
       place-items: center;
-      min-height: 220px;
+      min-height: 80px;
       border-radius: 14px;
       background: linear-gradient(180deg, #f7fbfd, #edf5f7);
       border: 1px solid #d8e6eb;
@@ -517,6 +517,7 @@
     .logo-modal-image {
       display: block;
       width: 100%;
+      height: auto;
       max-width: 100%;
       max-height: 78vh;
       object-fit: contain;
@@ -726,6 +727,8 @@
       <button class="modal-close" id="logoModalCloseBtn">✕</button>
       <h2>Phone-Footprint-Studio</h2>
         <p class="logo-modal-copy">Vergleiche Smartphone-Größen direkt im Browser, stelle zwei Modelle auf einer A4-Vorschau gegenüber, pflege eigene Gerätedaten, lade JSON-Listen nach und exportiere das Ergebnis als SVG oder Druckansicht. Die Anwendung ist bewusst leichtgewichtig, direkt nutzbar und ideal, um neue Geräte schnell gegeneinander auszuprobieren.</p>
+        <p class="logo-modal-copy">Weitere Informationen und den Quellcode findest du auf <a href="https://github.com/GPSHansl/phone-footprint-studio" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+        <p class="logo-modal-copy">Lizensiert unter der <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT-Lizenz</a>.</p>
       <div class="logo-modal-stage">
         <img id="logoModalImage" class="logo-modal-image" src="./phoneFootprintStudio.png" alt="Phone Footprint Studio Logo">
         <div id="logoModalFallback" class="logo-fallback logo-modal-fallback is-hidden" aria-hidden="true">👣</div>
